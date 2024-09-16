@@ -1,4 +1,4 @@
-class Ship {
+export default class Ship {
   constructor() {
     // Largest ship has the length of 3
     this.length = 3;
