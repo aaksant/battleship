@@ -5,7 +5,6 @@ describe('Ship test', () => {
   let ship;
 
   beforeEach(() => {
-    // Use the largest ship
     ship = new Ship(3);
   });
 
