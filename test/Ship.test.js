@@ -9,7 +9,7 @@ describe('Ship test', () => {
   });
 
   test('initialize ship object', () => {
-    expect(ship).toEqual({ length: 3, hits: [], sink: false });
+    expect(ship).toEqual({ length: 3, hits: [] });
   });
 
   test('ship takes a hit in valid position', () => {
