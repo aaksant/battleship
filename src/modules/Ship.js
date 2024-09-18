@@ -5,8 +5,11 @@ export default class Ship {
     this.sink = false;
   }
 
-  hit() {
-    this.hitCount++;
+  hit(pos) {
+    if (pos < 0 || pos >= this.length || this.hits.includes(pos)) {
+      return;
+    }
+    this.hits.push(pos);
   }
 
   isSunk() {
