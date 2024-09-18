@@ -5,22 +5,39 @@ describe('Ship test', () => {
   let ship;
 
   beforeEach(() => {
-    ship = new Ship();
+    // Use the largest ship
+    ship = new Ship(3);
   });
 
   test('initialize ship object', () => {
-    expect(ship).toEqual({ length: 3, hitCount: 0, sink: false });
+    expect(ship).toEqual({ length: 3, hits: [], sink: false });
   });
 
-  test('ship takes a hit', () => {
-    ship.hit();
-    expect(ship.length).toBe(ship.length--);
-  });
+  test('ship takes a hit in valid position', () => {
+    ship.hit(0);
+    ship.hit(1);
+    ship.hit(2);
 
-  test('ship takes a hit until it sank', () => {
-    for (let i = 0; i < ship.length; i++) {
-      ship.hit();
-    }
+    expect(ship.hits).toContain(0);
+    expect(ship.hits).toContain(1);
+    expect(ship.hits).toContain(2);
+    expect(ship.hits).toHaveLength(3);
     expect(ship.isSunk()).toBe(true);
+  });
+
+  test('repeated hit position would be ignored', () => {
+    ship.hit(1);
+    ship.hit(1);
+    expect(ship.hits).toHaveLength(1);
+  });
+
+  test('negative hit position would be ignored', () => {
+    ship.hit(-1);
+    expect(ship.hits).toHaveLength(0);
+  });
+
+  test('hit position that is greater than ship length would be ignored', () => {
+    ship.hit(3);
+    expect(ship.hits).toHaveLength(0);
   });
 });
