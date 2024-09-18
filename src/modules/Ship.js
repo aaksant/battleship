@@ -1,8 +1,7 @@
 export default class Ship {
-  constructor() {
-    // Largest ship has the length of 3
-    this.length = 3;
-    this.hitCount = 0;
+  constructor(length) {
+    this.length = length;
+    this.hits = [];
     this.sink = false;
   }
 
