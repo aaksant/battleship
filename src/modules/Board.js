@@ -36,4 +36,12 @@ export default class Board {
 
     return false;
   }
+
+  isValidPlacement(ship, row, col, isVertical) {
+    return (
+      this.isInsideBoard(row, col) &&
+      this.isWholeShipInBoard(ship, row, col, isVertical) &&
+      !this.isPlaceTaken(ship, row, col, isVertical)
+    );
+  }
 }
