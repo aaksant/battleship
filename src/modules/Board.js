@@ -10,31 +10,30 @@ export default class Board {
   }
 
   isInsideBoard(row, col) {
-    if (row < 0 || col < 0 || row > this.size - 1 || col > this.size - 1) {
-      return false;
-    }
+    return row >= 0 && col >= 0 && row < this.size && col < this.size;
   }
 
-  isFitInBoard(ship, row, col, isVertical) {
+  isWholeShipInBoard(ship, row, col, isVertical) {
     if (isVertical) {
-      if (row + ship.length > this.size) return false;
+      return row + ship.length <= this.size;
     } else {
-      if (col + ship.length > this.size) return false;
+      return col + ship.length <= this.size;
     }
   }
 
   isPlaceTaken(ship, row, col, isVertical) {
-    if (isVertical) {
-      for (let i = 0; i < ship.length; i++) {
-        // If a cell is not a null
-        const rowCell = this.grid[row + i][col];
-        if (rowCell) return false;
-      }
-    } else {
-      for (let i = 0; i < ship.length; i++) {
-        const colCell = this.grid[row][col + 1];
-        if (colCell) return false;
+    for (let i = 0; i < ship.length; i++) {
+      const checkRow = isVertical ? row + i : row;
+      const checkCol = isVertical ? col : col + i;
+
+      if (
+        !this.isInsideBoard(checkRow, checkCol) ||
+        this.grid[checkRow][checkCol] !== null
+      ) {
+        return true;
       }
     }
+
+    return false;
   }
 }
