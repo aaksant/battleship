@@ -44,4 +44,18 @@ export default class Board {
       !this.isPlaceTaken(ship, row, col, isVertical)
     );
   }
+
+  placeShip(ship, row, col, isVertical) {
+    if (!this.isValidPlacement(ship, row, col, isVertical)) return false;
+
+    for (let i = 0; i < ship.length; i++) {
+      if (isVertical) {
+        this.grid[row + i][col] = ship;
+      } else {
+        this.grid[row][col + i] = ship;
+      }
+    }
+
+    return true;
+  }
 }
