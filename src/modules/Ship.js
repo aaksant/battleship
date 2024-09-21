@@ -4,11 +4,11 @@ export default class Ship {
     this.hits = [];
   }
 
-  hit(pos) {
-    if (pos < 0 || pos >= this.length || this.hits.includes(pos)) {
+  hit(partIndex) {
+    if (partIndex < 0 || partIndex >= this.length || this.hits.includes(partIndex)) {
       return;
     }
-    this.hits.push(pos);
+    this.hits.push(partIndex);
   }
 
   isSunk() {
