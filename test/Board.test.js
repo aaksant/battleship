@@ -4,11 +4,13 @@ import { describe, test, expect, beforeEach } from '@jest/globals';
 
 describe('Board test', () => {
   let board;
-  let ship;
+  let verticalShip;
+  let horizontalShip;
 
   beforeEach(() => {
     board = new Board();
-    ship = new Ship(3);
+    verticalShip = new Ship(3);
+    horizontalShip = new Ship(3);
   });
 
   test('initialize board object', () => {
@@ -37,15 +39,15 @@ describe('Board test', () => {
 
   describe('isWholeShipInBoard', () => {
     test('ships completely inside board return true', () => {
-      expect(board.isWholeShipInBoard(ship, 0, 0, true)).toBe(true);
-      expect(board.isWholeShipInBoard(ship, 0, 0, false)).toBe(true);
-      expect(board.isWholeShipInBoard(ship, 7, 7, true)).toBe(true);
-      expect(board.isWholeShipInBoard(ship, 7, 7, false)).toBe(true);
+      expect(board.isWholeShipInBoard(verticalShip, 0, 0, true)).toBe(true);
+      expect(board.isWholeShipInBoard(horizontalShip, 0, 0, false)).toBe(true);
+      expect(board.isWholeShipInBoard(verticalShip, 7, 7, true)).toBe(true);
+      expect(board.isWholeShipInBoard(horizontalShip, 7, 7, false)).toBe(true);
     });
 
     test('ships partially outside board return false', () => {
-      expect(board.isWholeShipInBoard(ship, 8, 0, true)).toBe(false);
-      expect(board.isWholeShipInBoard(ship, 0, 8, false)).toBe(false);
+      expect(board.isWholeShipInBoard(verticalShip, 8, 0, true)).toBe(false);
+      expect(board.isWholeShipInBoard(horizontalShip, 0, 8, false)).toBe(false);
     });
   });
 
@@ -55,36 +57,36 @@ describe('Board test', () => {
     });
 
     test('empty places return false', () => {
-      expect(board.isPlaceTaken(ship, 3, 3, true)).toBe(false);
-      expect(board.isPlaceTaken(ship, 3, 3, false)).toBe(false);
+      expect(board.isPlaceTaken(verticalShip, 3, 3, true)).toBe(false);
+      expect(board.isPlaceTaken(horizontalShip, 3, 3, false)).toBe(false);
     });
 
     test('occupied places return true', () => {
-      expect(board.isPlaceTaken(ship, 0, 0, true)).toBe(true);
-      expect(board.isPlaceTaken(ship, 0, 0, false)).toBe(true);
+      expect(board.isPlaceTaken(verticalShip, 0, 0, true)).toBe(true);
+      expect(board.isPlaceTaken(horizontalShip, 0, 0, false)).toBe(true);
     });
 
     test('places outside board return true', () => {
-      expect(board.isPlaceTaken(ship, -1, 0, true)).toBe(true);
-      expect(board.isPlaceTaken(ship, 0, 10, false)).toBe(true);
+      expect(board.isPlaceTaken(verticalShip, -1, 0, true)).toBe(true);
+      expect(board.isPlaceTaken(horizontalShip, 0, 10, false)).toBe(true);
     });
   });
 
   describe('placeShip', () => {
     test('successfully place ship', () => {
-      expect(board.placeShip(ship, 0, 0, true)).toBe(true);
-      expect(board.grid[0][0]).toBe(ship);
-      expect(board.grid[1][0]).toBe(ship);
-      expect(board.grid[2][0]).toBe(ship);
+      expect(board.placeShip(verticalShip, 0, 0, true)).toBe(true);
+      expect(board.grid[0][0]).toBe(verticalShip);
+      expect(board.grid[1][0]).toBe(verticalShip);
+      expect(board.grid[2][0]).toBe(verticalShip);
     });
 
     test('fail to place ship outside board', () => {
-      expect(board.placeShip(ship, 8, 0, true)).toBe(false);
+      expect(board.placeShip(verticalShip, 8, 0, true)).toBe(false);
     });
 
     test('fail to place ship on occupied space', () => {
-      board.placeShip(ship, 0, 0, true);
-      expect(board.placeShip(new Ship(2), 0, 0, false)).toBe(false);
+      board.placeShip(verticalShip, 0, 0, true);
+      expect(board.placeShip(horizontalShip, 0, 0, false)).toBe(false);
     });
   });
 });
