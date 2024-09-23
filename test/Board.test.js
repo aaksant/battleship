@@ -12,13 +12,12 @@ describe('Board test', () => {
   });
 
   test('initialize board object', () => {
-    expect(board).toEqual({
-      size: 10,
-      grid: Array(10)
-        .fill()
-        .map(() => Array(10).fill(null)),
-      missedAttempts: []
-    });
+    expect(board.size).toBe(10);
+    expect(board.grid).toHaveLength(10);
+    expect(board.grid[0]).toHaveLength(10);
+    expect(board.attackGrid).toHaveLength(10);
+    expect(board.attackGrid[0]).toHaveLength(10);
+    expect(board.attackGrid[0][0]).toBe(false);
   });
 
   describe('isInsideBoard', () => {
