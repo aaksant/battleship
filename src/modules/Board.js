@@ -4,7 +4,7 @@ export default class Board {
   constructor() {
     this.size = 10;
     this.grid = this.createGrid(true);
-    this.missedAttempts = this.createGrid(false);
+    this.attackGrid = this.createGrid(false);
   }
 
   createGrid(isShipGrid) {
