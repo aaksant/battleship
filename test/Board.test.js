@@ -89,4 +89,37 @@ describe('Board test', () => {
       expect(board.placeShip(horizontalShip, 0, 0, false)).toBe(false);
     });
   });
+
+  describe('receiveAttack', () => {
+    beforeEach(() => {
+      board.placeShip(verticalShip, 0, 0, true);
+      board.placeShip(horizontalShip, 5, 5, false);
+    });
+
+    test('hit attack on vertical ship', () => {
+      expect(board.receiveAttack(0, 0)).toBe(true);
+      expect(board.attackGrid[0][0]).toBe(true);
+      expect(verticalShip.hits).toContain(0);
+    });
+
+    test('hit attack on horizontal ship', () => {
+      expect(board.receiveAttack(5, 5)).toBe(true);
+      expect(board.attackGrid[5][5]).toBe(true);
+      expect(horizontalShip.hits).toContain(0);
+    });
+
+    test('miss attack', () => {
+      board.receiveAttack(5, 5);
+      expect(board.attackGrid[5][5]).toBe(true);
+    });
+
+    test('attack same position twice', () => {
+      board.receiveAttack(0, 0);
+      expect(board.receiveAttack(0, 0)).toBe(false);
+    });
+
+    test('attack outside board', () => {
+      expect(board.receiveAttack(10, 10)).toBe(false);
+    });
+  });
 });
