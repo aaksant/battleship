@@ -58,4 +58,33 @@ export default class Board {
 
     return true;
   }
+
+  getPartIndex(ship, hitRow, hitCol) {
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        if (this.grid[i][j] === ship) {
+          if (i === hitRow) {
+            return hitCol - j;
+          } else if (j === hitCol) {
+            return hitRow - i;
+          }
+        }
+      }
+    }
+  }
+
+  receiveAttack(row, col) {
+    if (!this.isInsideBoard(row, col)) return false;
+
+    if (this.grid[row][col] instanceof Ship) {
+      const ship = this.grid[row][col];
+      const partIndex = this.getPartIndex(ship, row, col);
+
+      ship.hit(partIndex);
+      return true;
+    } else {
+      this.missedAttempts.push({ row, col });
+      return false;
+    }
+  }
 }
