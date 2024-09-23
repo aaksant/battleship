@@ -78,17 +78,19 @@ export default class Board {
   }
 
   receiveAttack(row, col) {
-    if (!this.isInsideBoard(row, col)) return false;
+    if (!this.isInsideBoard(row, col) || this.attackGrid[row][col])
+      return false;
+
+    this.attackGrid[row][col] = true;
 
     if (this.grid[row][col] instanceof Ship) {
       const ship = this.grid[row][col];
       const partIndex = this.getPartIndex(ship, row, col);
-
       ship.hit(partIndex);
+
       return true;
-    } else {
-      this.missedAttempts.push({ row, col });
-      return false;
     }
+
+    return false;
   }
 }
