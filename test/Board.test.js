@@ -122,4 +122,14 @@ describe('Board test', () => {
       expect(board.receiveAttack(10, 10)).toBe(false);
     });
   });
+
+  describe('isGameOver', () => {
+    test('all ships sunk', () => {
+      board.placeShip(verticalShip, 0, 0, true);
+      board.receiveAttack(0, 0);
+      board.receiveAttack(1, 0);
+      board.receiveAttack(2, 0);
+      expect(board.isGameOver()).toBe(true);
+    });
+  });
 });
