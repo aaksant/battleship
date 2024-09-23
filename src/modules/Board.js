@@ -3,10 +3,14 @@ import Ship from './Ship';
 export default class Board {
   constructor() {
     this.size = 10;
-    this.grid = Array(this.size)
+    this.grid = this.createGrid(true);
+    this.missedAttempts = this.createGrid(false);
+  }
+
+  createGrid(isShipGrid) {
+    return Array(this.size)
       .fill()
-      .map(() => Array(this.size).fill(null));
-    this.missedAttempts = [];
+      .map(() => Array(this.size).fill(isShipGrid ? null : false));
   }
 
   isInsideBoard(row, col) {
