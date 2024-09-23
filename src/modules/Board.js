@@ -93,4 +93,19 @@ export default class Board {
 
     return false;
   }
+
+  isGameOver() {
+    for (let row = 0; row < this.size; row++) {
+      for (let col = 0; col < this.size; col++) {
+        if (
+          this.grid[row][col] instanceof Ship &&
+          !this.grid[row][col].isSunk()
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }
