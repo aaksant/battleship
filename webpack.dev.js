@@ -6,6 +6,6 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   devServer: {
     static: './dist',
-    watchFiles: ['./src/index.html']
+    watchFiles: ['./src/view/index.html']
   },
 });
