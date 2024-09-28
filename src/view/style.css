@@ -2,6 +2,7 @@
   box-sizing: border-box;
   --border-radius: 0.75rem;
   --main-blue: #007bff;
+  --grid-size: 37px;
 }
 
 *,
@@ -15,6 +16,51 @@
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.wrapper {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.boards-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.board {
+  padding: 20px;
+}
+
+.board h2 {
+  margin-bottom: 15px;
+  color: var(--main-blue);
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, var(--grid-size));
+  grid-template-rows: repeat(10, var(--grid-size));
+  gap: 2px;
+  border: 1px solid black;
+}
+
+.grid-cell {
+  width: var(--grid-size);
+  height: var(--grid-size);
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.grid-cell:hover {
+  background-color: #d0d0d0;
 }
 
 .btn {
@@ -57,4 +103,8 @@ body {
 
 #playerName:focus {
   border: 1px solid var(--main-blue);
+}
+
+.hidden {
+  display: none;
 }

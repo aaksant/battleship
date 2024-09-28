@@ -4,24 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>battleshit</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="modal">
-      <div class="modal-header">
-        <h1>Enter your name</h1>
-        <button class="btn btn-close-modal">&times;</button>
-      </div>
-      <div class="modal-form">
-        <div class="name-input">
-          <label for="playerName"></label>
-          <input
-            type="text"
-            name="playerName"
-            id="playerName"
-            placeholder="Il Capitano"
-          />
+    <div class="wrapper">
+      <div class="modal hidden">
+        <div class="modal-header">
+          <h2>Enter your name</h2>
+          <button class="btn-close-modal">&times;</button>
+        </div>
+        <div class="modal-form">
+          <input type="text" id="playerName" placeholder="Il Capitano" />
         </div>
       </div>
+
+      <header class="header">
+        <h1 class="turn" data-current-player="Player 1">
+          It's player 1's turn
+        </h1>
+      </header>
+
+      <main class="main">
+        <div class="boards-container">
+          <div class="board board-container">
+            <h2>Your Board</h2>
+            <div class="grid player-grid"></div>
+          </div>
+          <div class="board board-container">
+            <h2>Opponent's Board</h2>
+            <div class="grid opponent-grid"></div>
+          </div>
+        </div>
+      </main>
     </div>
+    <script src="script.js"></script>
   </body>
 </html>
