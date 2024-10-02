@@ -4,20 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>battleshit</title>
-    <link rel="stylesheet" href="style.css" type="text/html"/>
+    <link rel="stylesheet" href="style.css" type="text/html" />
   </head>
   <body>
     <div class="wrapper">
-      <div class="modal hidden">
+      <div class="modal">
         <div class="modal-header">
           <h2>Enter your name</h2>
-          <button class="btn-close-modal">&times;</button>
+          <button class="btn btn-close-modal">&times;</button>
         </div>
-        <div class="modal-form">
-          <input type="text" id="playerName" placeholder="Il Capitano" />
-        </div>
+        <form action="/" id="form">
+          <label for="playerName"></label>
+          <input
+            type="text"
+            name="playerName"
+            id="playerName"
+            placeholder="Il Capitano"
+          />
+        </form>
       </div>
-      <main class="main">
+      <main class="main hidden">
         <div class="header">
           <h1 class="turn" data-current-player="Player 1">
             It's player 1's turn
