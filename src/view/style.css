@@ -33,33 +33,31 @@ body {
   justify-content: space-around;
 }
 
-.board {
+.board-container {
   padding: 20px;
 }
 
-.board h2 {
+.board-container h2 {
   margin-bottom: 15px;
   color: var(--main-blue);
   text-align: center;
 }
 
-.grid {
+.board {
   display: grid;
   grid-template-columns: repeat(10, var(--grid-size));
   grid-template-rows: repeat(10, var(--grid-size));
-  gap: 2px;
   border: 1px solid black;
 }
 
-.grid-cell {
+.cell {
   width: var(--grid-size);
   height: var(--grid-size);
-  background-color: #e0e0e0;
   border: 1px solid #ccc;
   cursor: pointer;
 }
 
-.grid-cell:hover {
+.cell:hover {
   background-color: #d0d0d0;
 }
 
