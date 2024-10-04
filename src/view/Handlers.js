@@ -1,23 +1,30 @@
 export default class Handlers {
   constructor() {
+    this.defaultPlayerName = 'Player';
     this.getPlayerName();
   }
 
   getPlayerName() {
     const form = document.getElementById('form');
     const playerNameInput = document.getElementById('playerName');
-    const main = document.querySelector('.main');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      this.closeModal();
-      main.classList.remove('hidden');
-      return playerNameInput.value ? playerNameInput.value : 'Player';
+      this.closeModal(form.parentElement);
+      this.openPreviewModal();
+
+      return playerNameInput.value
+        ? playerNameInput.value.trim()
+        : this.defaultPlayerName;
     });
   }
 
-  closeModal() {
-    const modal = document.querySelector('.modal');
+  openPreviewModal() {
+    const previewModal = document.querySelector('.modal-preview');
+    previewModal.classList.remove('hidden');
+  }
+
+  closeModal(modal) {
     modal.classList.add('hidden');
   }
 }
