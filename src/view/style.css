@@ -193,6 +193,13 @@ body {
   background-color: #dc2626;
 }
 
+.btn-start:disabled {
+  background-color: var(--hover-gray);
+  transform: none; 
+  transition: none;
+  cursor: not-allowed;
+}
+
 /* Modal */
 .modal {
   position: fixed;
@@ -208,15 +215,6 @@ body {
 .modal-header {
   margin-bottom: 2rem;
   text-align: center;
-}
-
-.btn-close-modal {
-  position: absolute;
-  top: 0.25rem;
-  right: 2rem;
-  border: none;
-  background: none;
-  font-size: 3rem;
 }
 
 #playerName {
