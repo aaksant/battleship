@@ -27,6 +27,10 @@ export default class Game {
       for (let col = 0; col < grid[row].length; col++) {
         const cell = document.createElement('div');
         cell.classList.add('cell');
+        cell.classList.add('dropzone');
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+
         boardElement.appendChild(cell);
       }
     }
