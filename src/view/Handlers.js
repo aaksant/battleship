@@ -3,6 +3,7 @@ export default class Handlers {
     this.defaultPlayerName = 'Player';
     this.getPlayerName();
     this.handleShipDrag();
+    this.handleReset();
   }
 
   getPlayerName() {
@@ -27,6 +28,11 @@ export default class Handlers {
 
   closeModal(modal) {
     modal.classList.add('hidden');
+  }
+
+  handleReset() {
+    const btnReset = document.querySelector('.btn-reset');
+    btnReset.addEventListener('click', this.clearBoard.bind(this));
   }
 
   handleShipDrag() {
@@ -88,5 +94,16 @@ export default class Handlers {
 
       if (targetCell) targetCell.classList.add('occupied');
     }
+  }
+
+  clearBoard() {
+    const cells = document.querySelectorAll('.cell');
+    const occupiedCells = [...cells].filter(cell =>
+      cell.classList.contains('occupied')
+    );
+
+    occupiedCells.forEach(occupiedCell =>
+      occupiedCell.classList.remove('occupied')
+    );
   }
 }
