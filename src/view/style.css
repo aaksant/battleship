@@ -61,6 +61,10 @@ body {
   cursor: pointer;
 }
 
+.cell.occupied {
+  background-color: var(--main-blue);
+}
+
 .cell:hover {
   background-color: var(--hover-gray);
 }
