@@ -61,7 +61,8 @@ body {
   cursor: pointer;
 }
 
-.cell.occupied {
+.cell.occupied,
+.cell.occupied:hover {
   background-color: var(--main-blue);
 }
 
@@ -200,7 +201,7 @@ body {
 
 .btn-start:disabled {
   background-color: var(--hover-gray);
-  transform: none; 
+  transform: none;
   transition: none;
   cursor: not-allowed;
 }
