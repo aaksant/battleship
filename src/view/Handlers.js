@@ -29,16 +29,18 @@ export default class Handlers {
     modal.classList.add('hidden');
   }
 
-  // TODO: handle drag event
   handleShipDrag() {
     const shipsContainer = document.querySelector('.ships-container');
     const playerBoard = document.querySelector('.player-board');
     // call dragstart
-    shipsContainer.addEventListener('dragstart', this.handleDragStart);
+    shipsContainer.addEventListener(
+      'dragstart',
+      this.handleDragStart.bind(this)
+    );
     // call dragover
-    playerBoard.addEventListener('dragover', this.handleOver);
+    playerBoard.addEventListener('dragover', this.handleOver.bind(this));
     // call drop
-    // playerBoard.addEventListener('drop', this.handleDrop);
+    playerBoard.addEventListener('drop', this.handleDrop.bind(this));
   }
 
   handleDragStart(e) {
@@ -62,7 +64,7 @@ export default class Handlers {
     const lengthType = e.dataTransfer.types.find(type =>
       type.startsWith('length-')
     );
-    const length = lengthType.split('-')[1].split('/')[0];
+    const length = +lengthType.split('-')[1].split('/')[0];
 
     return { startRow, startCol, length };
   }
@@ -73,5 +75,18 @@ export default class Handlers {
     e.preventDefault();
 
     const { startRow, startCol, length } = this.handleOver(e);
+    this.fillBoard(startRow, startCol, length);
+  }
+
+  fillBoard(startRow, startCol, length) {
+    const playerBoard = document.querySelector('.player-board');
+
+    for (let col = startCol; col < startCol + length; col++) {
+      const targetCell = playerBoard.querySelector(
+        `[data-row="${startRow}"][data-col="${col}"]`
+      );
+
+      if (targetCell) targetCell.classList.add('occupied');
+    }
   }
 }
