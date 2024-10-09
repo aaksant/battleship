@@ -1,7 +1,7 @@
 // TODO: add vertical alignment
-// FIXME: can place ship beyond right side of the border
 
 import Board from '../modules/Board';
+import Ship from '../modules/Ship';
 
 export default class Handlers {
   constructor() {
@@ -52,7 +52,10 @@ export default class Handlers {
     playerBoard.addEventListener('dragover', this.handleOver.bind(this));
     playerBoard.addEventListener('drop', this.handleDrop.bind(this));
 
-    playerBoard.addEventListener('dragleave', this.clearDragFeedback.bind(this));
+    playerBoard.addEventListener(
+      'dragleave',
+      this.clearDragFeedback.bind(this)
+    );
     document.addEventListener('dragend', this.clearDragFeedback.bind(this));
   }
 
@@ -71,7 +74,7 @@ export default class Handlers {
     let dropzone = e.target;
     if (!dropzone.classList.contains('dropzone')) return;
     e.preventDefault();
-    
+
     this.clearDragFeedback();
 
     const startRow = parseInt(dropzone.dataset.row);
@@ -80,8 +83,18 @@ export default class Handlers {
       type.startsWith('length-')
     );
     const length = parseInt(lengthType.split('-')[1].split('/')[0]);
+    const ship = new Ship(length);
 
-    this.showDragFeedback(startRow, startCol, length);
+    const isValidPlacement = this.board.isValidPlacement(
+      ship,
+      startRow,
+      startCol,
+      false
+    );
+
+    if (isValidPlacement) {
+      this.showDragFeedback(startRow, startCol, length);
+    }
 
     return { startRow, startCol, length };
   }
