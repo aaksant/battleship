@@ -1,5 +1,11 @@
+// TODO: add vertical alignment
+// FIXME: can place ship beyond right side of the border
+
+import Board from '../modules/Board';
+
 export default class Handlers {
   constructor() {
+    this.board = new Board();
     this.defaultPlayerName = 'Player';
     this.getPlayerName();
     this.handleShipDrag();
@@ -38,15 +44,16 @@ export default class Handlers {
   handleShipDrag() {
     const shipsContainer = document.querySelector('.ships-container');
     const playerBoard = document.querySelector('.player-board');
-    // call dragstart
+
     shipsContainer.addEventListener(
       'dragstart',
       this.handleDragStart.bind(this)
     );
-    // call dragover
     playerBoard.addEventListener('dragover', this.handleOver.bind(this));
-    // call drop
     playerBoard.addEventListener('drop', this.handleDrop.bind(this));
+
+    playerBoard.addEventListener('dragleave', this.clearDragFeedback.bind(this));
+    document.addEventListener('dragend', this.clearDragFeedback.bind(this));
   }
 
   handleDragStart(e) {
@@ -64,15 +71,39 @@ export default class Handlers {
     let dropzone = e.target;
     if (!dropzone.classList.contains('dropzone')) return;
     e.preventDefault();
+    
+    this.clearDragFeedback();
 
     const startRow = parseInt(dropzone.dataset.row);
     const startCol = parseInt(dropzone.dataset.col);
     const lengthType = e.dataTransfer.types.find(type =>
       type.startsWith('length-')
     );
-    const length = +lengthType.split('-')[1].split('/')[0];
+    const length = parseInt(lengthType.split('-')[1].split('/')[0]);
+
+    this.showDragFeedback(startRow, startCol, length);
 
     return { startRow, startCol, length };
+  }
+
+  showDragFeedback(startRow, startCol, length) {
+    const playerBoard = document.querySelector('.player-board');
+
+    for (let col = startCol; col < startCol + length; col++) {
+      const cell = playerBoard.querySelector(
+        `[data-row="${startRow}"][data-col="${col}"]`
+      );
+      if (cell) {
+        cell.classList.add('drag-feedback');
+      }
+    }
+  }
+
+  clearDragFeedback() {
+    const playerBoard = document.querySelector('.player-board');
+    playerBoard.querySelectorAll('.drag-feedback').forEach(cell => {
+      cell.classList.remove('drag-feedback');
+    });
   }
 
   handleDrop(e) {
