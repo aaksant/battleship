@@ -70,6 +70,11 @@ body {
   background-color: var(--hover-gray);
 }
 
+.drag-feedback {
+  border: 2.5px solid var(--main-blue);
+  transition: background-color 0.1s ease;
+}
+
 .btn {
   cursor: pointer;
   border-radius: var(--border-radius);
@@ -139,9 +144,7 @@ body {
   align-items: center;
   gap: 1rem;
   padding: 0.5rem;
-  cursor: move;
   border-radius: var(--border-radius);
-  cursor: grab;
 }
 
 .ship-row:hover {
@@ -189,6 +192,10 @@ body {
 
 .ship-length {
   color: var(--instruction-gray);
+}
+
+.draggable {
+  cursor: grab;
 }
 
 .btn-start {
