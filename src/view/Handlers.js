@@ -1,3 +1,4 @@
+// TODO: bundle length and shipType
 // TODO: add vertical alignment
 
 import Board from '../modules/Board';
@@ -67,7 +68,16 @@ export default class Handlers {
       dragObject = dragObject.firstElementChild;
     }
 
-    e.dataTransfer.setData(`length-${dragObject.dataset.length}/plain`, '');
+    // Set the ship attributes
+    const shipData = {
+      length: parseInt(dragObject.dataset.length),
+      type: dragObject.dataset.ship
+    };
+
+    // Store general attributes as JSON
+    e.dataTransfer.setData('application/json', JSON.stringify(shipData));
+    // Store only ship length
+    e.dataTransfer.setData(`ship-length-${shipData.length}/plain`, '');
   }
 
   handleOver(e) {
@@ -79,10 +89,13 @@ export default class Handlers {
 
     const startRow = parseInt(dropzone.dataset.row);
     const startCol = parseInt(dropzone.dataset.col);
+
     const lengthType = e.dataTransfer.types.find(type =>
-      type.startsWith('length-')
+      type.startsWith('ship-length-')
     );
-    const length = parseInt(lengthType.split('-')[1].split('/')[0]);
+    if (!lengthType) return;
+
+    const length = parseInt(lengthType.split('-').at(-1));
     const ship = new Ship(length);
 
     const isValidPlacement = this.board.isValidPlacement(
@@ -96,7 +109,7 @@ export default class Handlers {
       this.showDragFeedback(startRow, startCol, length);
     }
 
-    return { startRow, startCol, length };
+    return { startRow, startCol, length, isValidPlacement };
   }
 
   showDragFeedback(startRow, startCol, length) {
@@ -114,9 +127,9 @@ export default class Handlers {
 
   clearDragFeedback() {
     const playerBoard = document.querySelector('.player-board');
-    playerBoard.querySelectorAll('.drag-feedback').forEach(cell => {
-      cell.classList.remove('drag-feedback');
-    });
+    playerBoard
+      .querySelectorAll('.drag-feedback')
+      .forEach(cell => cell.classList.remove('drag-feedback'));
   }
 
   handleDrop(e) {
@@ -124,8 +137,15 @@ export default class Handlers {
     if (!dropzone.classList.contains('dropzone')) return;
     e.preventDefault();
 
-    const { startRow, startCol, length } = this.handleOver(e);
-    this.fillBoard(startRow, startCol, length);
+    const { startRow, startCol, length, isValidPlacement } = this.handleOver(e);
+
+    if (isValidPlacement) {
+      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      const ship = new Ship(data.length);
+
+      this.board.placeShip(ship, startRow, startCol, false);
+      this.fillBoard(startRow, startCol, length);
+    }
   }
 
   fillBoard(startRow, startCol, length) {
