@@ -1,4 +1,3 @@
-// TODO: bundle length and shipType
 // TODO: add vertical alignment
 
 import Board from '../modules/Board';
