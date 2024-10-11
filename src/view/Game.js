@@ -1,11 +1,11 @@
 import Player from '../modules/Player';
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
-import Handlers from './Handlers';
+import Setup from './Setup';
 
 export default class Game {
   constructor() {
-    this.handlers = new Handlers();
+    this.setup = new Setup();
     this.playerBoard = new Board();
     this.opponentBoard = new Board();
     this.initPlayersBoard();
