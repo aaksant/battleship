@@ -109,23 +109,18 @@ body {
   gap: 1rem;
 }
 
-.board-instructions {
+.board-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
 }
 
-.board-instructions span {
-  color: var(--instruction-gray);
-  font-size: 0.9rem;
-}
-
-.board-instructions .btn {
+.board-buttons .btn {
   background-color: var(--main-blue);
 }
 
-.board-instructions .btn:hover {
+.board-buttons .btn:hover {
   background-color: var(--hover-blue);
 }
 
