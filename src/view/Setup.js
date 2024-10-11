@@ -46,7 +46,6 @@ export default class Setup {
         case 'reset':
           this.clearBoard();
           break;
-
         default:
           break;
       }
@@ -123,6 +122,22 @@ export default class Setup {
     return { startRow, startCol, length, isValidPlacement };
   }
 
+  handleDrop(e) {
+    let dropzone = e.target;
+    if (!dropzone.classList.contains('dropzone')) return;
+    e.preventDefault();
+
+    const { startRow, startCol, length, isValidPlacement } = this.handleOver(e);
+
+    if (isValidPlacement) {
+      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      const ship = new Ship(data.length);
+
+      this.board.placeShip(ship, startRow, startCol, false);
+      this.fillBoard(startRow, startCol, length);
+    }
+  }
+
   showDragFeedback(startRow, startCol, length) {
     const playerBoard = document.querySelector('.player-board');
 
@@ -141,22 +156,6 @@ export default class Setup {
     playerBoard
       .querySelectorAll('.drag-feedback')
       .forEach(cell => cell.classList.remove('drag-feedback'));
-  }
-
-  handleDrop(e) {
-    let dropzone = e.target;
-    if (!dropzone.classList.contains('dropzone')) return;
-    e.preventDefault();
-
-    const { startRow, startCol, length, isValidPlacement } = this.handleOver(e);
-
-    if (isValidPlacement) {
-      const data = JSON.parse(e.dataTransfer.getData('application/json'));
-      const ship = new Ship(data.length);
-
-      this.board.placeShip(ship, startRow, startCol, false);
-      this.fillBoard(startRow, startCol, length);
-    }
   }
 
   fillBoard(startRow, startCol, length) {
