@@ -168,5 +168,7 @@ export default class Setup {
     occupiedCells.forEach(occupiedCell =>
       occupiedCell.classList.remove('occupied')
     );
+
+    this.board = new Board();
   }
 }
