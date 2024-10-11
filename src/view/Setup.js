@@ -7,9 +7,10 @@ export default class Setup {
   constructor() {
     this.board = new Board();
     this.defaultPlayerName = 'Player';
+
     this.getPlayerName();
+    this.handleBoardButtons();
     this.handleShipDrag();
-    this.handleReset();
   }
 
   getPlayerName() {
@@ -36,9 +37,20 @@ export default class Setup {
     modal.classList.add('hidden');
   }
 
-  handleReset() {
-    const btnReset = document.querySelector('.btn-reset');
-    btnReset.addEventListener('click', this.clearBoard.bind(this));
+  handleBoardButtons() {
+    document.querySelector('.board-buttons').addEventListener('click', e => {
+      const btn = e.target.closest('.btn');
+      if (!btn) return;
+
+      switch (btn.dataset.action) {
+        case 'reset':
+          this.clearBoard();
+          break;
+
+        default:
+          break;
+      }
+    });
   }
 
   handleShipDrag() {
