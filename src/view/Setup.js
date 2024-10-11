@@ -3,7 +3,7 @@
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
-export default class Handlers {
+export default class Setup {
   constructor() {
     this.board = new Board();
     this.defaultPlayerName = 'Player';
