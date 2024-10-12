@@ -7,6 +7,7 @@ export default class Setup {
   constructor() {
     this.board = new Board();
     this.defaultPlayerName = 'Player';
+    this.isVertical = false;
 
     this.getPlayerName();
     this.handleBoardButtons();
@@ -43,6 +44,9 @@ export default class Setup {
       if (!btn) return;
 
       switch (btn.dataset.action) {
+        case 'rotate':
+          this.rotateShip();
+          break;
         case 'reset':
           this.clearBoard();
           break;
@@ -50,6 +54,24 @@ export default class Setup {
           break;
       }
     });
+  }
+
+  rotateShip() {
+    this.isVertical = !this.isVertical;
+    console.log(this.isVertical);
+  }
+
+  clearBoard() {
+    const cells = document.querySelectorAll('.cell');
+    const occupiedCells = [...cells].filter(cell =>
+      cell.classList.contains('occupied')
+    );
+
+    occupiedCells.forEach(occupiedCell =>
+      occupiedCell.classList.remove('occupied')
+    );
+
+    this.board = new Board();
   }
 
   handleShipDrag() {
@@ -76,17 +98,16 @@ export default class Setup {
 
     if (dragObject.classList.contains('draggable')) {
       dragObject = dragObject.firstElementChild;
+
+      if (this.isVertical) dragObject.classList.add('vertical');
     }
 
-    // Set the ship attributes
     const shipData = {
       length: parseInt(dragObject.dataset.length),
-      type: dragObject.dataset.ship
+      type: dragObject.dataset.ship,
     };
 
-    // Store general attributes as JSON
     e.dataTransfer.setData('application/json', JSON.stringify(shipData));
-    // Store only ship length
     e.dataTransfer.setData(`ship-length-${shipData.length}/plain`, '');
   }
 
@@ -112,11 +133,11 @@ export default class Setup {
       ship,
       startRow,
       startCol,
-      false
+      this.isVertical
     );
 
     if (isValidPlacement) {
-      this.showDragFeedback(startRow, startCol, length);
+      this.showDragFeedback(startRow, startCol, length, this.isVertical);
     }
 
     return { startRow, startCol, length, isValidPlacement };
@@ -133,17 +154,19 @@ export default class Setup {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       const ship = new Ship(data.length);
 
-      this.board.placeShip(ship, startRow, startCol, false);
-      this.fillBoard(startRow, startCol, length);
+      this.board.placeShip(ship, startRow, startCol, this.isVertical);
+      this.fillBoard(startRow, startCol, length, this.isVertical);
     }
   }
 
-  showDragFeedback(startRow, startCol, length) {
+  showDragFeedback(startRow, startCol, length, isVertical) {
     const playerBoard = document.querySelector('.player-board');
 
-    for (let col = startCol; col < startCol + length; col++) {
+    for (let i = 0; i < length; i++) {
+      const row = isVertical ? startRow + i : startRow;
+      const col = isVertical ? startCol : startCol + i;
       const cell = playerBoard.querySelector(
-        `[data-row="${startRow}"][data-col="${col}"]`
+        `[data-row="${row}"][data-col="${col}"]`
       );
       if (cell) {
         cell.classList.add('drag-feedback');
@@ -158,28 +181,17 @@ export default class Setup {
       .forEach(cell => cell.classList.remove('drag-feedback'));
   }
 
-  fillBoard(startRow, startCol, length) {
+  fillBoard(startRow, startCol, length, isVertical) {
     const playerBoard = document.querySelector('.player-board');
 
-    for (let col = startCol; col < startCol + length; col++) {
+    for (let i = 0; i < length; i++) {
+      const row = isVertical ? startRow + i : startRow;
+      const col = isVertical ? startCol : startCol + i;
       const targetCell = playerBoard.querySelector(
-        `[data-row="${startRow}"][data-col="${col}"]`
+        `[data-row="${row}"][data-col="${col}"]`
       );
 
       if (targetCell) targetCell.classList.add('occupied');
     }
-  }
-
-  clearBoard() {
-    const cells = document.querySelectorAll('.cell');
-    const occupiedCells = [...cells].filter(cell =>
-      cell.classList.contains('occupied')
-    );
-
-    occupiedCells.forEach(occupiedCell =>
-      occupiedCell.classList.remove('occupied')
-    );
-
-    this.board = new Board();
   }
 }
