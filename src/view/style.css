@@ -71,7 +71,7 @@ body {
 }
 
 .drag-feedback {
-  border: 2.5px solid var(--main-blue);
+  border: 3px solid var(--main-blue);
   transition: background-color 0.1s ease;
 }
 
@@ -151,6 +151,11 @@ body {
   background-color: var(--main-blue);
   border-radius: calc(var(--border-radius) / 2);
   height: var(--grid-size);
+}
+
+.ship.vertical {
+  display: flex;
+  flex-direction: column;
 }
 
 .ship-segment {
