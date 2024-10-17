@@ -153,11 +153,6 @@ body {
   height: var(--grid-size);
 }
 
-.ship.vertical {
-  display: flex;
-  flex-direction: column;
-}
-
 .ship-segment {
   flex: 1;
   border-right: 2px solid rgba(255, 255, 255, 0.3);
