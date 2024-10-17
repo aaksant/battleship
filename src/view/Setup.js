@@ -1,5 +1,3 @@
-// TODO: add vertical alignment
-
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
