@@ -132,6 +132,21 @@ body {
   border: 2px dashed var(--border-gray);
   border-radius: var(--border-radius);
   min-width: 250px;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.ships-container.inaccessible {
+  opacity: 0.6;
+  background-color: #f0f0f0;
+  pointer-events: none;
+}
+
+.ships-container.inaccessible .ship-row {
+  cursor: not-allowed;
+}
+
+.ships-container.inaccessible .ship {
+  filter: grayscale(50%);
 }
 
 .ship-row {

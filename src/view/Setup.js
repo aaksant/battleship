@@ -1,3 +1,5 @@
+// TODO: add ship counter
+
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
@@ -6,6 +8,7 @@ export default class Setup {
     this.board = new Board();
     this.defaultPlayerName = 'Player';
     this.isVertical = false;
+    this.totalShipCells = 17;
 
     this.getPlayerName();
     this.handleBoardButtons();
@@ -56,7 +59,6 @@ export default class Setup {
 
   rotateShip() {
     this.isVertical = !this.isVertical;
-    console.log(this.isVertical);
   }
 
   clearBoard() {
@@ -102,7 +104,7 @@ export default class Setup {
 
     const shipData = {
       length: parseInt(dragObject.dataset.length),
-      type: dragObject.dataset.ship,
+      type: dragObject.dataset.ship
     };
 
     e.dataTransfer.setData('application/json', JSON.stringify(shipData));
@@ -146,7 +148,10 @@ export default class Setup {
     if (!dropzone.classList.contains('dropzone')) return;
     e.preventDefault();
 
-    const { startRow, startCol, length, isValidPlacement } = this.handleOver(e);
+    const dropData = this.handleOver(e);
+    if (!dropData) return;
+
+    const { startRow, startCol, length, isValidPlacement } = dropData;
 
     if (isValidPlacement) {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
@@ -154,7 +159,36 @@ export default class Setup {
 
       this.board.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
+
+      if (this.getShipCount() === this.totalShipCells) this.disableDragEvents();
     }
+  }
+
+  disableDragEvents() {
+    const playerBoard = document.querySelector('.player-board');
+    const shipsContainer = document.querySelector('.ships-container');
+    const shipRows = document.querySelectorAll('.ship-row');
+
+    shipRows.forEach(shipRow => {
+      shipRow.setAttribute('draggable', 'false');
+      shipRow.classList.remove('draggable');
+      shipRow.style.cursor = 'default';
+    });
+
+    shipsContainer.removeEventListener(
+      'dragstart',
+      this.handleDragStart.bind(this)
+    );
+    playerBoard.removeEventListener('dragover', this.handleOver.bind(this));
+    playerBoard.removeEventListener('drop', this.handleDrop.bind(this));
+    playerBoard.removeEventListener('dragleave', this.clearDragFeedback);
+    document.removeEventListener('dragend', this.clearDragFeedback);
+
+    this.disableShipsContainer();
+  }
+
+  disableShipsContainer() {
+    document.querySelector('.ships-container').classList.add('inaccessible');
   }
 
   showDragFeedback(startRow, startCol, length, isVertical) {
@@ -191,5 +225,11 @@ export default class Setup {
 
       if (targetCell) targetCell.classList.add('occupied');
     }
+  }
+
+  getShipCount() {
+    const cells = document.querySelectorAll('.cell');
+    return [...cells].filter(cell => cell.classList.contains('occupied'))
+      .length;
   }
 }
