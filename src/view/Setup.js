@@ -10,7 +10,7 @@ export default class Setup {
 
     this.getPlayerName();
     this.handleBoardButtons();
-    this.handleShipDrag();
+    this.initDragAndDrop();
   }
 
   getPlayerName() {
@@ -78,7 +78,7 @@ export default class Setup {
     return [...shipRows].map(shipRow => shipRow.firstElementChild.dataset.ship);
   }
 
-  handleShipDrag() {
+  initDragAndDrop() {
     const shipsContainer = document.querySelector('.ships-container');
     const playerBoard = document.querySelector('.player-board');
 
