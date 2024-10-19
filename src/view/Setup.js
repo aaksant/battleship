@@ -1,5 +1,3 @@
-// TODO: add ship counter
-
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
@@ -8,7 +6,7 @@ export default class Setup {
     this.board = new Board();
     this.defaultPlayerName = 'Player';
     this.isVertical = false;
-    this.totalShipCells = 17;
+    this.shipTypes = this.getShipTypes();
 
     this.getPlayerName();
     this.handleBoardButtons();
@@ -72,6 +70,12 @@ export default class Setup {
     );
 
     this.board = new Board();
+    this.occupiedCells = 0;
+  }
+
+  getShipTypes() {
+    const shipRows = document.querySelectorAll('.ship-row');
+    return [...shipRows].map(shipRow => shipRow.firstElementChild.dataset.ship);
   }
 
   handleShipDrag() {
@@ -157,11 +161,16 @@ export default class Setup {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       const ship = new Ship(data.length);
 
+      this.shipTypes.splice(this.shipTypes.indexOf(data.type), 1);
       this.board.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
 
-      if (this.getShipCount() === this.totalShipCells) this.disableDragEvents();
+      if (this.isAllShipsPlaced()) this.disableDragEvents();
     }
+  }
+
+  isAllShipsPlaced() {
+    return this.shipTypes.length === 0;
   }
 
   disableDragEvents() {
@@ -225,11 +234,5 @@ export default class Setup {
 
       if (targetCell) targetCell.classList.add('occupied');
     }
-  }
-
-  getShipCount() {
-    const cells = document.querySelectorAll('.cell');
-    return [...cells].filter(cell => cell.classList.contains('occupied'))
-      .length;
   }
 }
