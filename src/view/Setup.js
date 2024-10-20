@@ -85,6 +85,8 @@ export default class Setup {
         }
       }
     });
+
+    this.shipTypes = [];
   }
 
   reset() {
