@@ -60,8 +60,7 @@ export default class Setup {
   }
 
   reset() {
-    const shipsContainer = document.querySelector('.ships-container');
-    const shipsRow = document.querySelectorAll('.ship-row');
+    const shipRows = document.querySelectorAll('.ship-row');
     const cells = document.querySelectorAll('.cell');
     const occupiedCells = [...cells].filter(cell =>
       cell.classList.contains('occupied')
@@ -70,10 +69,10 @@ export default class Setup {
     occupiedCells.forEach(occupiedCell =>
       occupiedCell.classList.remove('occupied')
     );
-    shipsContainer.classList.remove('inaccessible');
-    shipsRow.forEach(shipRow => {
+    shipRows.forEach(shipRow => {
       shipRow.setAttribute('draggable', 'true');
       shipRow.classList.add('draggable');
+      shipRow.classList.remove('inaccessible');
       shipRow.style.cursor = 'grab';
     });
 
@@ -171,43 +170,16 @@ export default class Setup {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       const ship = new Ship(data.length);
 
+      this.disableShipRow(data.type);
       this.shipTypes.splice(this.shipTypes.indexOf(data.type), 1);
       this.board.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
-
-      if (this.isAllShipsPlaced()) this.disableDragEvents();
     }
   }
 
-  isAllShipsPlaced() {
-    return this.shipTypes.length === 0;
-  }
-
-  disableDragEvents() {
-    const playerBoard = document.querySelector('.player-board');
-    const shipsContainer = document.querySelector('.ships-container');
-    const shipRows = document.querySelectorAll('.ship-row');
-
-    shipRows.forEach(shipRow => {
-      shipRow.setAttribute('draggable', 'false');
-      shipRow.classList.remove('draggable');
-      shipRow.style.cursor = 'default';
-    });
-
-    shipsContainer.removeEventListener(
-      'dragstart',
-      this.handleDragStart.bind(this)
-    );
-    playerBoard.removeEventListener('dragover', this.handleOver.bind(this));
-    playerBoard.removeEventListener('drop', this.handleDrop.bind(this));
-    playerBoard.removeEventListener('dragleave', this.clearDragFeedback);
-    document.removeEventListener('dragend', this.clearDragFeedback);
-
-    this.toggleShipsContainer();
-  }
-
-  toggleShipsContainer() {
-    document.querySelector('.ships-container').classList.toggle('inaccessible');
+  disableShipRow(type) {
+    const placedShip = document.querySelector(`.ship-row .ship.${type}`);
+    placedShip.parentElement.classList.add('inaccessible');
   }
 
   showDragFeedback(startRow, startCol, length, isVertical) {
