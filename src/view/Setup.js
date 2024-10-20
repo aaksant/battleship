@@ -1,4 +1,4 @@
-// TODO: implement random functionality
+// TODO: refactor ship placement
 
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
@@ -13,6 +13,15 @@ export default class Setup {
     this.getPlayerName();
     this.handleBoardButtons();
     this.initDragAndDrop();
+    this.disableStartGameButton();
+  }
+
+  enableStartGameButton() {
+    document.querySelector('.btn-start').removeAttribute('disabled');
+  }
+
+  disableStartGameButton() {
+    document.querySelector('.btn-start').setAttribute('disabled', '');
   }
 
   getPlayerName() {
@@ -87,6 +96,7 @@ export default class Setup {
     });
 
     this.shipTypes = [];
+    this.enableStartGameButton();
   }
 
   reset() {
@@ -110,6 +120,7 @@ export default class Setup {
     this.shipTypes = this.getShipTypes();
     this.isVertical = false;
     this.initDragAndDrop();
+    this.disableStartGameButton();
   }
 
   getRandomPosition() {
@@ -212,6 +223,8 @@ export default class Setup {
       this.shipTypes.splice(this.shipTypes.indexOf(data.type), 1);
       this.board.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
+
+      if (!this.shipTypes.length) this.enableStartGameButton();
     }
   }
 
