@@ -1,5 +1,3 @@
-// TODO: refactor ship placement
-
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
