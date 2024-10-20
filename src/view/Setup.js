@@ -1,3 +1,5 @@
+// TODO: implement random functionality
+
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
@@ -49,6 +51,9 @@ export default class Setup {
         case 'reset':
           this.reset();
           break;
+        case 'random':
+          this.placeRandom();
+          break;
         default:
           break;
       }
@@ -57,6 +62,29 @@ export default class Setup {
 
   rotateShip() {
     this.isVertical = !this.isVertical;
+  }
+
+  placeRandom() {
+    this.reset();
+
+    this.shipTypes.forEach(shipType => {
+      const shipElement = document.querySelector(
+        `.ship[data-ship=${shipType}]`
+      );
+      const length = parseInt(shipElement.dataset.length);
+      const ship = new Ship(length);
+
+      let currentPlacedShip = null;
+      while (!currentPlacedShip) {
+        const { row, col, isVertical } = this.getRandomPosition();
+        currentPlacedShip = this.board.placeShip(ship, row, col, isVertical);
+
+        if (currentPlacedShip) {
+          this.fillBoard(row, col, length, isVertical);
+          this.disableShipRow(shipType);
+        }
+      }
+    });
   }
 
   reset() {
@@ -80,6 +108,14 @@ export default class Setup {
     this.shipTypes = this.getShipTypes();
     this.isVertical = false;
     this.initDragAndDrop();
+  }
+
+  getRandomPosition() {
+    const row = Math.floor(Math.random() * this.board.size);
+    const col = Math.floor(Math.random() * this.board.size);
+    const isVertical = Math.random() < 0.5;
+
+    return { row, col, isVertical };
   }
 
   getShipTypes() {
