@@ -47,7 +47,7 @@ export default class Setup {
           this.rotateShip();
           break;
         case 'reset':
-          this.clearBoard();
+          this.reset();
           break;
         default:
           break;
@@ -59,7 +59,9 @@ export default class Setup {
     this.isVertical = !this.isVertical;
   }
 
-  clearBoard() {
+  reset() {
+    const shipsContainer = document.querySelector('.ships-container');
+    const shipsRow = document.querySelectorAll('.ship-row');
     const cells = document.querySelectorAll('.cell');
     const occupiedCells = [...cells].filter(cell =>
       cell.classList.contains('occupied')
@@ -68,9 +70,17 @@ export default class Setup {
     occupiedCells.forEach(occupiedCell =>
       occupiedCell.classList.remove('occupied')
     );
+    shipsContainer.classList.remove('inaccessible');
+    shipsRow.forEach(shipRow => {
+      shipRow.setAttribute('draggable', 'true');
+      shipRow.classList.add('draggable');
+      shipRow.style.cursor = 'grab';
+    });
 
     this.board = new Board();
-    this.occupiedCells = 0;
+    this.shipTypes = this.getShipTypes();
+    this.isVertical = false;
+    this.initDragAndDrop();
   }
 
   getShipTypes() {
@@ -193,11 +203,11 @@ export default class Setup {
     playerBoard.removeEventListener('dragleave', this.clearDragFeedback);
     document.removeEventListener('dragend', this.clearDragFeedback);
 
-    this.disableShipsContainer();
+    this.toggleShipsContainer();
   }
 
-  disableShipsContainer() {
-    document.querySelector('.ships-container').classList.add('inaccessible');
+  toggleShipsContainer() {
+    document.querySelector('.ships-container').classList.toggle('inaccessible');
   }
 
   showDragFeedback(startRow, startCol, length, isVertical) {
