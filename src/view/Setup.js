@@ -15,11 +15,15 @@ export default class Setup {
   }
 
   enableStartGameButton() {
-    document.querySelector('.btn-start').removeAttribute('disabled');
+    document
+      .querySelector('.btn[data-action="start"]')
+      .removeAttribute('disabled');
   }
 
   disableStartGameButton() {
-    document.querySelector('.btn-start').setAttribute('disabled', '');
+    document
+      .querySelector('.btn[data-action="start"]')
+      .setAttribute('disabled', '');
   }
 
   getPlayerName() {

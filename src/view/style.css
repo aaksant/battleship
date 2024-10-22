@@ -116,12 +116,27 @@ body {
   padding: 0.5rem;
 }
 
-.board-buttons .btn {
+.board-buttons .btn:nth-child(-n + 3) {
   background-color: var(--main-blue);
 }
 
-.board-buttons .btn:hover {
+.board-buttons .btn:nth-child(-n + 3):hover {
   background-color: var(--hover-blue);
+}
+
+.board-buttons .btn:last-child {
+  background-color: #ef4444;
+}
+
+.board-buttons .btn:last-child:hover {
+  background-color: #dc2626;
+}
+
+.board-buttons .btn:last-child:disabled {
+  background-color: var(--hover-gray);
+  transform: none;
+  transition: none;
+  cursor: not-allowed;
 }
 
 .ships-container {
@@ -200,21 +215,6 @@ body {
 
 .draggable {
   cursor: grab;
-}
-
-.btn-start {
-  background-color: #ef4444;
-}
-
-.btn-start:hover {
-  background-color: #dc2626;
-}
-
-.btn-start:disabled {
-  background-color: var(--hover-gray);
-  transform: none;
-  transition: none;
-  cursor: not-allowed;
 }
 
 /* Modal */
