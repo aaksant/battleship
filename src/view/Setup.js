@@ -53,7 +53,7 @@ export default class Setup {
 
       switch (btn.dataset.action) {
         case 'rotate':
-          this.rotateShip();
+          this.rotate();
           break;
         case 'reset':
           this.reset();
@@ -67,7 +67,7 @@ export default class Setup {
     });
   }
 
-  rotateShip() {
+  rotate() {
     this.isVertical = !this.isVertical;
   }
 
