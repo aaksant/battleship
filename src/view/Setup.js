@@ -65,6 +65,9 @@ export default class Setup {
         case 'random':
           this.placeRandom();
           break;
+        case 'start':
+          this.start();
+          break;
         default:
           break;
       }
@@ -123,6 +126,14 @@ export default class Setup {
     this.isVertical = false;
     this.initDragAndDrop();
     this.disableStartGameButton();
+  }
+
+  start() {
+    const modalPreview = document.querySelector('.modal-preview');
+    const main = document.querySelector('.main');
+
+    modalPreview.classList.add('hidden');
+    main.classList.remove('hidden');
   }
 
   getRandomPosition() {
