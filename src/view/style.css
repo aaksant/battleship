@@ -103,7 +103,7 @@ body {
   margin-bottom: 2rem;
 }
 
-.preview-board {
+.preview-functions {
   display: flex;
   flex-direction: column;
   gap: 1rem;
