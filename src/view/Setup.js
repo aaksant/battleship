@@ -1,9 +1,14 @@
+// TODO: copy preview board to player
+
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
 export default class Setup {
   constructor() {
-    this.board = new Board();
+    this.previewBoard = new Board();
+    this.playerBoard = new Board();
+    this.opponentBoard = new Board();
+
     this.defaultPlayerName = 'Player';
     this.isVertical = false;
     this.shipTypes = this.getShipTypes();
@@ -12,6 +17,28 @@ export default class Setup {
     this.handleBoardButtons();
     this.initDragAndDrop();
     this.disableStartGameButton();
+  }
+
+  createBoard(grid, boardSelector) {
+    const boardElement = document.querySelector(boardSelector);
+
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[row].length; col++) {
+        const cell = document.createElement('div');
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        cell.classList.add('cell');
+        if (boardSelector === '.preview-board') cell.classList.add('dropzone');
+
+        boardElement.appendChild(cell);
+      }
+    }
+  }
+
+  initBoards() {
+    this.createBoard(this.previewBoard.grid, '.preview-board');
+    this.createBoard(this.playerBoard.grid, '.player-board');
+    this.createBoard(this.opponentBoard.grid, '.opponent-board');
   }
 
   enableStartGameButton() {
@@ -91,7 +118,12 @@ export default class Setup {
       let currentPlacedShip = null;
       while (!currentPlacedShip) {
         const { row, col, isVertical } = this.getRandomPosition();
-        currentPlacedShip = this.board.placeShip(ship, row, col, isVertical);
+        currentPlacedShip = this.previewBoard.placeShip(
+          ship,
+          row,
+          col,
+          isVertical
+        );
 
         if (currentPlacedShip) {
           this.fillBoard(row, col, length, isVertical);
@@ -121,7 +153,7 @@ export default class Setup {
       shipRow.style.cursor = 'grab';
     });
 
-    this.board = new Board();
+    this.previewBoard = new Board();
     this.shipTypes = this.getShipTypes();
     this.isVertical = false;
     this.initDragAndDrop();
@@ -132,13 +164,32 @@ export default class Setup {
     const modalPreview = document.querySelector('.modal-preview');
     const main = document.querySelector('.main');
 
+    this.playerBoard.copyFrom(this.previewBoard);
+    this.updatePlayerBoard();
+
     modalPreview.classList.add('hidden');
     main.classList.remove('hidden');
   }
 
+  updatePlayerBoard() {
+    for (let row = 0; row < this.playerBoard.size; row++) {
+      for (let col = 0; col < this.playerBoard.size; col++) {
+        if (this.playerBoard.grid[row][col] instanceof Ship) {
+          const ship = this.playerBoard.grid[row][col];
+          const { startRow, startCol, length, isVertical } =
+            this.playerBoard.getShipPosition(ship);
+
+          if (startRow === row && startCol === col) {
+            this.fillBoard(row, col, length, isVertical, '.player-board');
+          }
+        }
+      }
+    }
+  }
+
   getRandomPosition() {
-    const row = Math.floor(Math.random() * this.board.size);
-    const col = Math.floor(Math.random() * this.board.size);
+    const row = Math.floor(Math.random() * this.previewBoard.size);
+    const col = Math.floor(Math.random() * this.previewBoard.size);
     const isVertical = Math.random() < 0.5;
 
     return { row, col, isVertical };
@@ -151,7 +202,7 @@ export default class Setup {
 
   initDragAndDrop() {
     const shipsContainer = document.querySelector('.ships-container');
-    const playerBoard = document.querySelector('.player-board');
+    const playerBoard = document.querySelector('.preview-board');
 
     shipsContainer.addEventListener(
       'dragstart',
@@ -204,7 +255,7 @@ export default class Setup {
     const length = parseInt(lengthType.split('-').at(-1));
     const ship = new Ship(length);
 
-    const isValidPlacement = this.board.isValidPlacement(
+    const isValidPlacement = this.previewBoard.isValidPlacement(
       ship,
       startRow,
       startCol,
@@ -234,7 +285,7 @@ export default class Setup {
 
       this.disableShipRow(data.type);
       this.shipTypes.splice(this.shipTypes.indexOf(data.type), 1);
-      this.board.placeShip(ship, startRow, startCol, this.isVertical);
+      this.previewBoard.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
 
       if (!this.shipTypes.length) this.enableStartGameButton();
@@ -247,7 +298,7 @@ export default class Setup {
   }
 
   showDragFeedback(startRow, startCol, length, isVertical) {
-    const playerBoard = document.querySelector('.player-board');
+    const playerBoard = document.querySelector('.preview-board');
 
     for (let i = 0; i < length; i++) {
       const row = isVertical ? startRow + i : startRow;
@@ -262,19 +313,26 @@ export default class Setup {
   }
 
   clearDragFeedback() {
-    const playerBoard = document.querySelector('.player-board');
+    const playerBoard = document.querySelector('.preview-board');
     playerBoard
       .querySelectorAll('.drag-feedback')
       .forEach(cell => cell.classList.remove('drag-feedback'));
   }
 
-  fillBoard(startRow, startCol, length, isVertical) {
-    const playerBoard = document.querySelector('.player-board');
+  fillBoard(
+    startRow,
+    startCol,
+    length,
+    isVertical,
+    boardSelector = '.preview-board'
+  ) {
+    // const playerBoard = document.querySelector('.preview-board');
+    const board = document.querySelector(boardSelector);
 
     for (let i = 0; i < length; i++) {
       const row = isVertical ? startRow + i : startRow;
       const col = isVertical ? startCol : startCol + i;
-      const targetCell = playerBoard.querySelector(
+      const targetCell = board.querySelector(
         `[data-row="${row}"][data-col="${col}"]`
       );
 
