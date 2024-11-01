@@ -1,6 +1,6 @@
 import Board from '../src/modules/Board';
 import Ship from '../src/modules/Ship';
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import { describe, test, expect, beforeEach, beforeAll } from '@jest/globals';
 
 describe('Board test', () => {
   let board;
@@ -130,6 +130,33 @@ describe('Board test', () => {
       board.receiveAttack(1, 0);
       board.receiveAttack(2, 0);
       expect(board.isGameOver()).toBe(true);
+    });
+  });
+
+  describe('getShipPosition', () => {
+    beforeEach(() => {
+      board.placeShip(verticalShip, 0, 0, true);
+      board.placeShip(horizontalShip, 2, 5, false);
+    });
+
+    test('get vertical ship position', () => {
+      const position = board.getShipPosition(verticalShip);
+      expect(position).toEqual({
+        startRow: 0,
+        startCol: 0,
+        length: verticalShip.length,
+        isVertical: true
+      });
+    });
+
+    test('get horizontal ship position', () => {
+      const position = board.getShipPosition(horizontalShip);
+      expect(position).toEqual({
+        startRow: 2,
+        startCol: 5,
+        length: horizontalShip.length,
+        isVertical: false
+      });
     });
   });
 });
