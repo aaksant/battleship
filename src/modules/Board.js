@@ -66,7 +66,7 @@ export default class Board {
   getPartIndex(ship, hitRow, hitCol) {
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        if (this.d[i][j] === ship) {
+        if (this.grid[i][j] === ship) {
           if (i === hitRow) {
             return hitCol - j;
           } else if (j === hitCol) {
