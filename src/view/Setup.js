@@ -1,5 +1,3 @@
-// TODO: copy preview board to player
-
 import Board from '../modules/Board';
 import Ship from '../modules/Ship';
 
@@ -16,7 +14,7 @@ export default class Setup {
     this.getPlayerName();
     this.handleBoardButtons();
     this.initDragAndDrop();
-    this.disableStartGameButton();
+    this.toggleStartGameButton(false);
   }
 
   createBoard(grid, boardSelector) {
@@ -41,16 +39,14 @@ export default class Setup {
     this.createBoard(this.opponentBoard.grid, '.opponent-board');
   }
 
-  enableStartGameButton() {
-    document
-      .querySelector('.btn[data-action="start"]')
-      .removeAttribute('disabled');
-  }
+  toggleStartGameButton(isEnabled) {
+    const btnStart = document.querySelector('.btn[data-action="start"');
 
-  disableStartGameButton() {
-    document
-      .querySelector('.btn[data-action="start"]')
-      .setAttribute('disabled', '');
+    if (isEnabled) {
+      btnStart.removeAttribute('disabled');
+    } else {
+      btnStart.setAttribute('disabled', '');
+    }
   }
 
   getPlayerName() {
@@ -133,7 +129,7 @@ export default class Setup {
     });
 
     this.shipTypes = [];
-    this.enableStartGameButton();
+    this.toggleStartGameButton(true);
   }
 
   reset() {
@@ -157,7 +153,7 @@ export default class Setup {
     this.shipTypes = this.getShipTypes();
     this.isVertical = false;
     this.initDragAndDrop();
-    this.disableStartGameButton();
+    this.toggleStartGameButton(false);
   }
 
   start() {
@@ -288,7 +284,7 @@ export default class Setup {
       this.previewBoard.placeShip(ship, startRow, startCol, this.isVertical);
       this.fillBoard(startRow, startCol, length, this.isVertical);
 
-      if (!this.shipTypes.length) this.enableStartGameButton();
+      if (!this.shipTypes.length) this.toggleStartGameButton(true);
     }
   }
 
