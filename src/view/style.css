@@ -61,12 +61,12 @@ body {
   cursor: pointer;
 }
 
-.cell.occupied,
-.cell.occupied:hover {
+.board:not(.opponent-board) .cell.occupied {
   background-color: var(--main-blue);
 }
 
-.cell:hover {
+.board.preview-board .cell:not(.occupied):hover,
+.board.opponent-board .cell:hover {
   background-color: var(--hover-gray);
 }
 
