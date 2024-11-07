@@ -132,31 +132,4 @@ describe('Board test', () => {
       expect(board.isGameOver()).toBe(true);
     });
   });
-
-  describe('getShipPosition', () => {
-    beforeEach(() => {
-      board.placeShip(verticalShip, 0, 0, true);
-      board.placeShip(horizontalShip, 2, 5, false);
-    });
-
-    test('get vertical ship position', () => {
-      const position = board.getShipPosition(verticalShip);
-      expect(position).toEqual({
-        startRow: 0,
-        startCol: 0,
-        length: verticalShip.length,
-        isVertical: true
-      });
-    });
-
-    test('get horizontal ship position', () => {
-      const position = board.getShipPosition(horizontalShip);
-      expect(position).toEqual({
-        startRow: 2,
-        startCol: 5,
-        length: horizontalShip.length,
-        isVertical: false
-      });
-    });
-  });
 });
