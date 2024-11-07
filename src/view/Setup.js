@@ -86,7 +86,7 @@ export default class Setup {
           this.reset();
           break;
         case 'random':
-          this.placeRandom();
+          this.random();
           break;
         case 'start':
           this.start();
@@ -101,35 +101,39 @@ export default class Setup {
     this.isVertical = !this.isVertical;
   }
 
-  placeRandom() {
+  random() {
     this.reset();
+    this.placeRandom(true);
+    this.toggleStartGameButton(true);
+  }
 
-    this.shipTypes.forEach(shipType => {
-      const shipElement = document.querySelector(
-        `.ship[data-ship=${shipType}]`
-      );
-      const length = parseInt(shipElement.dataset.length);
-      const ship = new Ship(length);
+  placeRandom(isPlayer) {
+    const board = isPlayer ? this.previewBoard : this.opponentBoard;
 
-      let currentPlacedShip = null;
-      while (!currentPlacedShip) {
+    for (const { type, length } of this.getShipTypes()) {
+      let placed = false;
+
+      while (!placed) {
         const { row, col, isVertical } = this.getRandomPosition();
-        currentPlacedShip = this.previewBoard.placeShip(
-          ship,
-          row,
-          col,
-          isVertical
-        );
+        const ship = new Ship(length);
 
-        if (currentPlacedShip) {
-          this.fillBoard(row, col, length, isVertical);
-          this.disableShipRow(shipType);
+        if (board.isValidPlacement(ship, row, col, isVertical)) {
+          board.placeShip(ship, row, col, isVertical);
+
+          if (isPlayer) {
+            this.playerBoard.placeShip(ship, row, col, isVertical);
+            this.fillBoard(row, col, length, isVertical, '.preview-board');
+            this.fillBoard(row, col, length, isVertical, '.player-board');
+          } else {
+            this.opponentBoard.placeShip(ship, row, col, isVertical);
+            this.fillBoard(row, col, length, isVertical, '.opponent-board');
+          }
+          this.disableShipRow(type);
+          this.shipTypes.splice(this.shipTypes.indexOf(type), 1);
+          placed = true;
         }
       }
-    });
-
-    this.shipTypes = [];
-    this.toggleStartGameButton(true);
+    }
   }
 
   reset() {
@@ -150,6 +154,8 @@ export default class Setup {
     });
 
     this.previewBoard = new Board();
+    this.playerBoard = new Board();
+
     this.shipTypes = this.getShipTypes();
     this.isVertical = false;
     this.initDragAndDrop();
@@ -160,27 +166,9 @@ export default class Setup {
     const modalPreview = document.querySelector('.modal-preview');
     const main = document.querySelector('.main');
 
-    this.playerBoard.copyFrom(this.previewBoard);
-    this.updatePlayerBoard();
-
+    this.placeRandom(false);
     modalPreview.classList.add('hidden');
     main.classList.remove('hidden');
-  }
-
-  updatePlayerBoard() {
-    for (let row = 0; row < this.playerBoard.size; row++) {
-      for (let col = 0; col < this.playerBoard.size; col++) {
-        if (this.playerBoard.grid[row][col] instanceof Ship) {
-          const ship = this.playerBoard.grid[row][col];
-          const { startRow, startCol, length, isVertical } =
-            this.playerBoard.getShipPosition(ship);
-
-          if (startRow === row && startCol === col) {
-            this.fillBoard(row, col, length, isVertical, '.player-board');
-          }
-        }
-      }
-    }
   }
 
   getRandomPosition() {
@@ -193,7 +181,10 @@ export default class Setup {
 
   getShipTypes() {
     const shipRows = document.querySelectorAll('.ship-row');
-    return [...shipRows].map(shipRow => shipRow.firstElementChild.dataset.ship);
+    return [...shipRows].map(shipRow => ({
+      type: shipRow.firstElementChild.dataset.ship,
+      length: parseInt(shipRow.firstElementChild.dataset.length)
+    }));
   }
 
   initDragAndDrop() {
@@ -281,8 +272,24 @@ export default class Setup {
 
       this.disableShipRow(data.type);
       this.shipTypes.splice(this.shipTypes.indexOf(data.type), 1);
+
       this.previewBoard.placeShip(ship, startRow, startCol, this.isVertical);
-      this.fillBoard(startRow, startCol, length, this.isVertical);
+      this.playerBoard.placeShip(ship, startRow, startCol, this.isVertical);
+
+      this.fillBoard(
+        startRow,
+        startCol,
+        length,
+        this.isVertical,
+        '.preview-board'
+      );
+      this.fillBoard(
+        startRow,
+        startCol,
+        length,
+        this.isVertical,
+        '.player-board'
+      );
 
       if (!this.shipTypes.length) this.toggleStartGameButton(true);
     }
@@ -315,14 +322,7 @@ export default class Setup {
       .forEach(cell => cell.classList.remove('drag-feedback'));
   }
 
-  fillBoard(
-    startRow,
-    startCol,
-    length,
-    isVertical,
-    boardSelector = '.preview-board'
-  ) {
-    // const playerBoard = document.querySelector('.preview-board');
+  fillBoard(startRow, startCol, length, isVertical, boardSelector) {
     const board = document.querySelector(boardSelector);
 
     for (let i = 0; i < length; i++) {
