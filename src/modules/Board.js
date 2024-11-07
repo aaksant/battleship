@@ -77,51 +77,6 @@ export default class Board {
     }
   }
 
-  getShipPosition(ship) {
-    for (let row = 0; row < this.size; row++) {
-      for (let col = 0; col < this.size; col++) {
-        if (this.grid[row][col] === ship) {
-          // Check orientation by checking next position
-          const isVertical =
-            row + 1 < this.size && this.grid[row + 1][col] === ship;
-
-          return {
-            startRow: row,
-            startCol: col,
-            length: ship.length,
-            isVertical
-          };
-        }
-      }
-    }
-  }
-
-  copyFrom(sourceBoard) {
-    this.grid = this.createGrid(true);
-    this.attackGrid = this.createGrid(false);
-
-    const placedShip = new Set();
-
-    for (let row = 0; row < this.size; row++) {
-      for (let col = 0; col < this.size; col++) {
-        const ship = sourceBoard.grid[row][col];
-
-        if (ship instanceof Ship && !placedShip.has(ship)) {
-          const shipPosition = sourceBoard.getShipPosition(ship);
-
-          const newShip = new Ship(ship.length);
-          this.placeShip(
-            newShip,
-            shipPosition.startRow,
-            shipPosition.startCol,
-            shipPosition.isVertical
-          );
-
-          placedShip.add(ship);
-        }
-      }
-    }
-  }
   receiveAttack(row, col) {
     if (!this.isInsideBoard(row, col) || this.attackGrid[row][col])
       return false;
