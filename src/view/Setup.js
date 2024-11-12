@@ -50,27 +50,25 @@ export default class Setup {
   }
 
   getPlayerName() {
-    const form = document.getElementById('form');
-    const playerNameInput = document.getElementById('playerName');
+    return new Promise((resolve, _) => {
+      const form = document.getElementById('form');
+      const playerNameInput = document.getElementById('playerName');
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      this.closeModal(form.parentElement);
-      this.openPreviewModal();
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        this.hideForm();
 
-      return playerNameInput.value
-        ? playerNameInput.value.trim()
-        : this.defaultPlayerName;
+        resolve(playerNameInput.value.trim() || this.defaultPlayerName);
+      });
     });
   }
 
-  openPreviewModal() {
+  hideForm() {
+    const modalForm = document.querySelector('.modal-input');
     const previewModal = document.querySelector('.modal-preview');
-    previewModal.classList.remove('hidden');
-  }
 
-  closeModal(modal) {
-    modal.classList.add('hidden');
+    modalForm.classList.add('hidden');
+    previewModal.classList.remove('hidden');
   }
 
   handleBoardButtons() {
