@@ -6,16 +6,11 @@ import Setup from './Setup';
 export default class Game {
   constructor() {
     this.setup = new Setup();
-    this.playerName = this.setup.defaultPlayerName;
-    this.init();
+    this.initPlayer();
   }
 
-  init() {
-    this.setup.initBoards();
-    this.initPlayerName();
-  }
-
-  async initPlayerName() {
-    this.playerName = await this.setup.getPlayerName();
+  async initPlayer() {
+    const playerName = await this.setup.getPlayerName();
+    this.player = new Player(playerName);
   }
 }
