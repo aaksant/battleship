@@ -15,6 +15,7 @@ export default class Setup {
     this.handleBoardButtons();
     this.initDragAndDrop();
     this.toggleStartGameButton(false);
+    this.initBoards();
   }
 
   createBoard(grid, boardSelector) {
