@@ -26,15 +26,15 @@ export default class Game {
     }'s turn`;
   }
 
-  getBoardInfo() {
-    const boardLogic = this.isPlayerTurn
-      ? this.setup.opponentBoard
-      : this.setup.playerBoard;
-    const boardElement = document.querySelector(
-      this.isPlayerTurn ? '.opponent-board' : '.player-board'
-    );
-
-    return { boardLogic, boardElement };
+  getBoardState() {
+    return {
+      boardLogic: this.isPlayerTurn
+        ? this.setup.opponentBoard
+        : this.setup.playerBoard,
+      boardElement: document.querySelector(
+        this.isPlayerTurn ? '.opponent-board' : '.player-board'
+      )
+    };
   }
 
   changeCellColor(row, col, board, isSuccesfulHit) {
@@ -54,21 +54,39 @@ export default class Game {
     }
   }
 
-  computerMove() {
-    const { boardLogic, boardElement } = this.getBoardInfo();
+  handleAttackResult(
+    row,
+    col,
+    isSuccesfulHit,
+    boardLogic,
+    boardElement,
+    attacker
+  ) {
+    this.changeCellColor(row, col, boardElement, isSuccesfulHit);
+    this.checkGameOver(boardLogic, attacker);
+    this.switchTurn();
+  }
+
+  computerAttack() {
+    const { boardLogic, boardElement } = this.getBoardState();
     const isSuccesfulHit = this.computer.randomAttack(boardLogic);
 
     // get the last attack coords
     const lastCoords = [...this.computer.attackedCoords].at(-1);
     const [row, col] = lastCoords.split(', ').map(Number);
 
-    this.changeCellColor(row, col, boardElement, isSuccesfulHit);
-    this.checkGameOver(boardLogic, this.computer);
-    this.switchTurn();
+    this.handleAttackResult(
+      row,
+      col,
+      isSuccesfulHit,
+      boardLogic,
+      boardElement,
+      this.computer
+    );
   }
 
   handleAttack() {
-    const { boardLogic, boardElement } = this.getBoardInfo();
+    const { boardLogic, boardElement } = this.getBoardState();
 
     boardElement.addEventListener('click', e => {
       const cell = e.target.closest('.cell');
@@ -80,12 +98,17 @@ export default class Game {
 
       const isSuccesfulHit = this.player.attack(row, col, boardLogic);
 
-      this.changeCellColor(row, col, boardElement, isSuccesfulHit);
-      this.checkGameOver(boardLogic, this.player);
-      this.switchTurn();
+      this.handleAttackResult(
+        row,
+        col,
+        isSuccesfulHit,
+        boardLogic,
+        boardElement,
+        this.player
+      );
 
       setTimeout(() => {
-        this.computerMove();
+        this.computerAttack();
       }, 500);
     });
   }
