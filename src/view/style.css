@@ -61,9 +61,6 @@ body {
   cursor: pointer;
 }
 
-/* .board:not(.opponent-board) .cell.occupied {
-  background-color: var(--cell-blue);
-} */
 .board .cell.occupied {
   background-color: var(--cell-blue);
 }
@@ -260,6 +257,8 @@ body {
   animation: slideIn 0.3s ease-out;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
 .gameover-message {
@@ -267,6 +266,10 @@ body {
   font-weight: bolder;
   color: #1f2937;
   margin-bottom: 1.5rem;
+}
+
+.modal-gameover .btn {
+  background-color: var(--cell-blue);
 }
 
 .overlay {
