@@ -71,7 +71,6 @@ export default class Game {
     const { boardLogic, boardElement } = this.getBoardState();
     const isSuccesfulHit = this.computer.randomAttack(boardLogic);
 
-    // get the last attack coords
     const lastCoords = [...this.computer.attackedCoords].at(-1);
     const [row, col] = lastCoords.split(', ').map(Number);
 
@@ -91,6 +90,7 @@ export default class Game {
     boardElement.addEventListener('click', e => {
       const cell = e.target.closest('.cell');
       if (!cell) return;
+      if (!this.isPlayerTurn) return;
 
       const row = parseInt(cell.dataset.row);
       const col = parseInt(cell.dataset.col);
