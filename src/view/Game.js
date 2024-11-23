@@ -119,7 +119,7 @@ export default class Game {
 
       setTimeout(() => {
         this.computerAttack();
-      }, 500);
+      }, 600);
     });
   }
 }
