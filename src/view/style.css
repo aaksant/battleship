@@ -1,7 +1,7 @@
 :root {
   box-sizing: border-box;
   --border-radius: 0.75rem;
-  --main-blue: #007bff;
+  --cell-blue: #007bff;
   --hover-blue: #0062cc;
   --grid-size: 35px;
   --border-gray: #ccc;
@@ -43,7 +43,7 @@ body {
 
 .board-container h2 {
   margin-bottom: 15px;
-  color: var(--main-blue);
+  color: var(--cell-blue);
   text-align: center;
 }
 
@@ -62,7 +62,7 @@ body {
 }
 
 .board:not(.opponent-board) .cell.occupied {
-  background-color: var(--main-blue);
+  background-color: var(--cell-blue);
 }
 
 .board.preview-board .cell:not(.occupied):hover,
@@ -71,7 +71,7 @@ body {
 }
 
 .drag-feedback {
-  border: 3px solid var(--main-blue);
+  border: 3px solid var(--cell-blue);
   transition: background-color 0.1s ease;
 }
 
@@ -117,7 +117,7 @@ body {
 }
 
 .board-buttons .btn:nth-child(-n + 3) {
-  background-color: var(--main-blue);
+  background-color: var(--cell-blue);
 }
 
 .board-buttons .btn:nth-child(-n + 3):hover {
@@ -172,7 +172,7 @@ body {
 
 .ship {
   display: flex;
-  background-color: var(--main-blue);
+  background-color: var(--cell-blue);
   border-radius: calc(var(--border-radius) / 2);
   height: var(--grid-size);
 }
@@ -244,7 +244,7 @@ body {
 }
 
 #playerName:focus {
-  border: 1px solid var(--main-blue);
+  border: 1px solid var(--cell-blue);
 }
 
 .hidden {
