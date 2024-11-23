@@ -9,12 +9,17 @@ export default class Game {
     this.isPlayerTurn = true;
 
     this.initPlayer();
-    this.handleAttack();
+    this.initHandlers();
   }
 
   async initPlayer() {
     this.player = new Player(await this.setup.getPlayerName());
     this.computer = new Player('Computer');
+  }
+
+  initHandlers() {
+    this.handleAttack();
+    this.handleRestart();
   }
 
   switchTurn() {
@@ -60,7 +65,7 @@ export default class Game {
     const overlay = document.querySelector('.overlay');
 
     gameOverMessage.textContent = message;
-    modal.classList.remove('hidden');  
+    modal.classList.remove('hidden');
     overlay.classList.remove('hidden');
   }
 
@@ -120,6 +125,14 @@ export default class Game {
       setTimeout(() => {
         this.computerAttack();
       }, 600);
+    });
+  }
+
+  handleRestart() {
+    const btnRestart = document.querySelector('.modal-gameover .btn');
+
+    btnRestart.addEventListener('click', () => {
+      window.location.reload();
     });
   }
 }
