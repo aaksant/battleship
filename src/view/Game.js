@@ -49,9 +49,19 @@ export default class Game {
 
   checkGameOver(board, winner) {
     if (board.isGameOver()) {
-      alert(`Game over, ${winner.name} wins!`);
+      this.showGameOverMessage(`Game over, ${winner.name} wins!`);
       return;
     }
+  }
+
+  showGameOverMessage(message) {
+    const modal = document.querySelector('.modal-gameover');
+    const gameOverMessage = modal.querySelector('.gameover-message');
+    const overlay = document.querySelector('.overlay');
+
+    gameOverMessage.textContent = message;
+    modal.classList.remove('hidden');  
+    overlay.classList.remove('hidden');
   }
 
   handleAttackResult(
