@@ -61,7 +61,7 @@ body {
   cursor: pointer;
 }
 
-.board .cell.occupied {
+.board:not(.opponent-board) .cell.occupied {
   background-color: var(--cell-blue);
 }
 
